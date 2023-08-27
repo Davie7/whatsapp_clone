@@ -17,3 +17,7 @@ export 'package:whatsapp_clone/features/auth/screens/login_screen.dart';
 export 'package:whatsapp_clone/common/widgets/error.dart';
 export 'package:whatsapp_clone/common/widgets/custom_button.dart';
 export 'package:whatsapp_clone/router.dart';
+export 'package:firebase_auth/firebase_auth.dart';
+export 'package:whatsapp_clone/common/utils/utils.dart';
+export 'package:cloud_firestore/cloud_firestore.dart';
+export 'package:whatsapp_clone/features/auth/screens/otp_screen.dart';
