@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/barrel/export.dart';
 
 final authRepositoryProvider = Provider(
@@ -30,7 +29,11 @@ class AuthRepository {
             throw Exception(e.message);
           },
           codeSent: ((String verificationId, int? resendToken) async {
-            Navigator.pushNamed(context, OTPScreen.routeName);
+            Navigator.pushNamed(
+              context,
+              OTPScreen.routeName,
+              arguments: verificationId,
+            );
           }),
           codeAutoRetrievalTimeout: (String verificationId) {});
     } on FirebaseAuthException catch (e) {
@@ -38,6 +41,24 @@ class AuthRepository {
         context: context,
         content: e.message!,
       );
+    }
+  }
+
+  void verifyOTP({
+    required BuildContext context,
+    required String verificationId,
+    required String userOTP,
+  }) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        smsCode: userOTP,
+        verificationId: verificationId,
+      );
+      await auth.signInWithCredential(credential);
+      Navigator.pushNamedAndRemoveUntil(
+          context, UserInfoScreen.routeName, (route) => false);
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context: context, content: e.message!);
     }
   }
 }

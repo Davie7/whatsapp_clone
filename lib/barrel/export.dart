@@ -21,3 +21,10 @@ export 'package:firebase_auth/firebase_auth.dart';
 export 'package:whatsapp_clone/common/utils/utils.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:whatsapp_clone/features/auth/screens/otp_screen.dart';
+export 'package:country_picker/country_picker.dart';
+export 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:whatsapp_clone/firebase_options.dart';
+export 'package:firebase_core/firebase_core.dart';
+export 'package:whatsapp_clone/features/auth/repository/auth_repository.dart';
+export 'package:whatsapp_clone/features/auth/screens/user_information_screen.dart';
+

@@ -1,11 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:whatsapp_clone/barrel/export.dart';
-import 'package:whatsapp_clone/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,10 +24,6 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: (settings) => generateRoute(settings),
         home: const LandindScreen()
-        // const ResponsiveLayout(
-        //   mobileScreenLayout: MobileLayoutScreen(),
-        //   webScreenLayout: WebLayoutScreen(),
-        // ),
         );
   }
 }

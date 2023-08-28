@@ -1,15 +1,14 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:whatsapp_clone/barrel/export.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   static const routeName = '/login-screen';
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final phoneController = TextEditingController();
   Country? country;
 
@@ -27,6 +26,17 @@ class _LoginScreenState extends State<LoginScreen> {
             country = selectedCountry;
           });
         });
+  }
+
+  void sendPhoneNumber() {
+    String phoneNumber = phoneController.text.trim();
+    if (country != null && phoneNumber.isNotEmpty) {
+      ref
+          .read(authRepositoryProvider)
+          .signInWithPhone(context, '+${country!.phoneCode}$phoneNumber');
+    } else {
+      showSnackBar(context: context, content: 'Fill out all the fields');
+    }
   }
 
   @override
@@ -76,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 90,
                 child: CustomButton(
                   text: 'NEXT',
-                  onPressed: () {},
+                  onPressed: sendPhoneNumber,
                 ),
               )
             ],
