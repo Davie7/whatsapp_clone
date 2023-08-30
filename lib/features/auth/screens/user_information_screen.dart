@@ -1,17 +1,15 @@
-import 'dart:io';
+import 'package:whatsapp_clone/barrel/export.dart';
+import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 
-import 'package:flutter/material.dart';
-import 'package:whatsapp_clone/common/utils/utils.dart';
-
-class UserInfoScreen extends StatefulWidget {
+class UserInfoScreen extends ConsumerStatefulWidget {
   static const String routeName = '/user-information';
   const UserInfoScreen({super.key});
 
   @override
-  State<UserInfoScreen> createState() => _UserInfoScreenState();
+  ConsumerState<UserInfoScreen> createState() => _UserInfoScreenState();
 }
 
-class _UserInfoScreenState extends State<UserInfoScreen> {
+class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
   final TextEditingController _nameController = TextEditingController();
   File? image;
 
@@ -25,6 +23,17 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     image = await pickImageFromGallery(context);
   }
 
+  void storeUserData() async {
+    final name = _nameController.text.trim();
+    if (name.isNotEmpty) {
+      ref.read(authControllerProvider).saveUserDataToFirebase(
+            context,
+            name,
+            image,
+          );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -36,9 +45,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               Stack(
                 children: [
                   image == null
-                      ? const CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png'),
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(photoUrl),
                           radius: 64,
                         )
                       : CircleAvatar(
@@ -66,7 +74,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: storeUserData,
                     icon: Icon(Icons.done),
                   ),
                 ],

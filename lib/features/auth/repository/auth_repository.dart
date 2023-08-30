@@ -1,7 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
-import 'dart:io';
-
 import 'package:whatsapp_clone/barrel/export.dart';
 
 final authRepositoryProvider = Provider(
@@ -65,17 +62,40 @@ class AuthRepository {
   }
 
   void saveUserDataToFirebase({
-  required String name,
-  required File? profilePic,
-  required ProviderRef ref,
-  required BuildContext context,
-}) async{
-  try {
-     String uid = auth.currentUser!.uid;
-  } catch (e) {
-    showSnackBar(context: context, content: e.toString()) ;
+    required String name,
+    required File? profilePic,
+    required ProviderRef ref,
+    required BuildContext context,
+  }) async {
+    try {
+      String uid = auth.currentUser!.uid;
+      String photo = photoUrl;
+
+      if (profilePic != null) {
+        photo = await ref
+            .read(commonFirebaseStorageRepositoryProvider)
+            .storeFileToFirebase('ProfilePic/$uid', profilePic);
+      }
+
+      var user = UserModel(
+        name: name,
+        uid: uid,
+        profilePic: photo,
+        isOnline: true,
+        phoneNumber: auth.currentUser!.uid,
+        groupId: [],
+      );
+
+      await firestore.collection('users').doc(uid).set(user.toMap());
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MobileLayoutScreen(),
+          ),
+          (route) => false);
+    } catch (e) {
+      showSnackBar(context: context, content: e.toString());
+    }
   }
 }
-}
-
-
