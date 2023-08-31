@@ -15,6 +15,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => UserInfoScreen(),
       );
+    case SelectContactsScreen.routeName:
+      return MaterialPageRoute(
+        builder: (context) => SelectContactsScreen(),
+      );
+    case MobileChatScreen.routeName:
+      return MaterialPageRoute(
+        builder: (context) => MobileChatScreen(),
+      );
     default:
       return MaterialPageRoute(
           builder: (context) => const Scaffold(

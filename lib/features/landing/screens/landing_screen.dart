@@ -1,7 +1,7 @@
 import 'package:whatsapp_clone/barrel/export.dart';
 
-class LandindScreen extends StatelessWidget {
-  const LandindScreen({super.key});
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({super.key});
 
   void navigateToLoginScreeen(BuildContext context) {
     Navigator.pushNamed(context, LoginScreen.routeName);

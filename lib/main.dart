@@ -10,20 +10,33 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Whatsapp UI',
-        theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: backgroundColor,
-          appBarTheme: const AppBarTheme(color: appBarColor),
-        ),
-        onGenerateRoute: (settings) => generateRoute(settings),
-        home: const LandindScreen()
-        );
+      debugShowCheckedModeBanner: false,
+      title: 'Whatsapp UI',
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: const AppBarTheme(color: appBarColor),
+      ),
+      onGenerateRoute: (settings) => generateRoute(settings),
+      home: ref.watch(userDataAuthProvider).when(
+            data: (user) {
+              if (user == null) {
+                return const LandingScreen();
+              }
+              return const MobileLayoutScreen();
+            },
+            error: (error, trace) {
+              return ErrorScreen(
+                error: error.toString(),
+              );
+            },
+            loading: () => const Loader(),
+          ),
+    );
   }
 }

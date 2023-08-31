@@ -17,6 +17,18 @@ class AuthRepository {
     required this.firestore,
   });
 
+  Future<UserModel?> getCurrentUserData() async {
+    var userData =
+        await firestore.collection('users').doc(auth.currentUser?.uid).get();
+
+    UserModel? user;
+    if (userData.data() != null) {
+      user = UserModel.fromMap(userData.data()!);
+    }
+
+    return user;
+  }
+
   void signInWithPhone(BuildContext context, String phoneNumber) async {
     try {
       await auth.verifyPhoneNumber(
@@ -49,6 +61,7 @@ class AuthRepository {
     required String userOTP,
   }) async {
     try {
+      // creates a PhoneAuthCredential and attempts to sign in using this credential.
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         smsCode: userOTP,
         verificationId: verificationId,
@@ -82,7 +95,7 @@ class AuthRepository {
         uid: uid,
         profilePic: photo,
         isOnline: true,
-        phoneNumber: auth.currentUser!.uid,
+        phoneNumber: auth.currentUser!.phoneNumber!,
         groupId: [],
       );
 

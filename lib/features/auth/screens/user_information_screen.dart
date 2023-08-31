@@ -1,5 +1,4 @@
 import 'package:whatsapp_clone/barrel/export.dart';
-import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 
 class UserInfoScreen extends ConsumerStatefulWidget {
   static const String routeName = '/user-information';
