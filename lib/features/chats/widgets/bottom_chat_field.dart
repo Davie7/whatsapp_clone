@@ -1,39 +1,16 @@
 import 'package:whatsapp_clone/barrel/export.dart';
 
-class MobileChatScreen extends StatelessWidget {
-  static const String routeName = '/mobile-chat-screen';
-  const MobileChatScreen({Key? key}) : super(key: key);
+class BottomChatField extends StatelessWidget {
+  const BottomChatField({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appBarColor,
-        title: Text(
-          info[0]['name'].toString(),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.video_call),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.call),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const Expanded(
-            child: ChatList(),
-          ),
-          TextField(
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
             decoration: InputDecoration(
               filled: true,
               fillColor: mobileChatBoxColor,
@@ -75,8 +52,11 @@ class MobileChatScreen extends StatelessWidget {
               contentPadding: const EdgeInsets.all(10),
             ),
           ),
-        ],
-      ),
+        ),
+        CircleAvatar(
+          backgroundColor: greenColor,
+        ),
+      ],
     );
   }
 }
