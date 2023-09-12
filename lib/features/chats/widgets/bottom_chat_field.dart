@@ -1,42 +1,106 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:whatsapp_clone/barrel/export.dart';
+import 'package:whatsapp_clone/features/chats/controller/chat_controller.dart';
 
-class BottomChatField extends StatelessWidget {
+class BottomChatField extends ConsumerStatefulWidget {
+  final String receiverUserId;
   const BottomChatField({
-    super.key,
-  });
+    Key? key,
+    required this.receiverUserId,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<BottomChatField> createState() => _BottomChatFieldState();
+}
+
+class _BottomChatFieldState extends ConsumerState<BottomChatField> {
+  bool isShowSendButton = false;
+
+  final TextEditingController _messageController = TextEditingController();
+
+  void sendTextMessage() async {
+    if (isShowSendButton) {
+      ref.read(chatControllerProvider).sendTextMessage(
+            context,
+            _messageController.text.trim(),
+            widget.receiverUserId,
+          );
+      setState(() {
+        _messageController.text = '';
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _messageController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Row(
       children: [
         Expanded(
-          child: TextField(
+          child: TextFormField(
+            controller: _messageController,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                setState(() {
+                  isShowSendButton = true;
+                });
+              } else {
+                setState(() {
+                  isShowSendButton = false;
+                });
+              }
+            },
             decoration: InputDecoration(
               filled: true,
               fillColor: mobileChatBoxColor,
-              prefixIcon: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Icon(
-                  Icons.emoji_emotions,
-                  color: Colors.grey,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: SizedBox(
+                  width: size.width * 0.27,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.emoji_emotions,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.gif,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              suffixIcon: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+              suffixIcon: SizedBox(
+                width: size.width * 0.27,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(
-                      Icons.camera_alt,
-                      color: Colors.grey,
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.grey,
+                      ),
                     ),
-                    Icon(
-                      Icons.attach_file,
-                      color: Colors.grey,
-                    ),
-                    Icon(
-                      Icons.money,
-                      color: Colors.grey,
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.attach_file,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -55,6 +119,14 @@ class BottomChatField extends StatelessWidget {
         ),
         CircleAvatar(
           backgroundColor: greenColor,
+          radius: 25,
+          child: GestureDetector(
+            onTap: sendTextMessage,
+            child: Icon(
+              isShowSendButton ? Icons.send : Icons.mic,
+              color: Colors.white,
+            ),
+          ),
         ),
       ],
     );

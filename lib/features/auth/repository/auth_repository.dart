@@ -61,7 +61,7 @@ class AuthRepository {
     required String userOTP,
   }) async {
     try {
-      // creates a PhoneAuthCredential and attempts to sign in using this credential.
+      // create a PhoneAuthCredential and attempt to sign in using this credential.
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         smsCode: userOTP,
         verificationId: verificationId,
@@ -119,4 +119,13 @@ class AuthRepository {
           ),
         );
   }
+
+  void setUserState(bool isOnline) async {
+    await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .update({'isOnline': isOnline});
+  }
+
+  
 }
